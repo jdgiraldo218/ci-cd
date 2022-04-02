@@ -16,14 +16,16 @@ jobs:
       - checkout
       - run: npm install && npm run build
       - aws-s3/sync:
-          arguments: |
-            --acl public-read \
-            --cache-control "max-age=86400"
-          from: build
-          to: 's3://ci-cd-jgiraldo'
+        arguments: |
+          --acl public-read \
+          --cache-control "max-age=86400"
+        from: build
+        to: 's3://ci-cd-jgiraldo'
 
 workflows:
   test_build_deploy:
     jobs:
       - test
-      - build_deploy
+      - build_deploy:
+        requires:
+          - test
